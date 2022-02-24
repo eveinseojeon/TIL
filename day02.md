@@ -1,1 +1,172 @@
-# 2일차 정리
+# 2일차 정리 (220224)
+
+* 브랜치(branch)
+
+  : 가지를 치는 것처럼 별도로 뻗어나가서 작업을 하고 합칠 수 있음
+
+## GitHub 사용하기
+
+* repository(저장소)
+  - local repository : 내 컴퓨터의 내 저장공간
+  - remote repository : GitHub 상에 공간을 빌려서 만든 원격 저장소
+
+---
+
+### local -> remote 업로드 (상향식)
+
+* 내 컴퓨터의 내 저장공간에서 local repository로 선언해서 쓰다가 GitHub에게 저장공간을 빌려쓰는 것
+* local에서 만들어서 GitHub로 길을 만들고 GitHub로 push
+
+1. GitHub에서 Create a new repository
+
+2. GitHub 프로필 -> settings -> repositories -> default branch를 main -> master로 바꾸기
+
+3. 그대로 올릴 수 있도록 둘 사이에 길을 하나 뚫어주기
+
+   ```python
+    git remote add origin [url] 
+   ```
+
+   - remote repository 연결할 때 통상적으로 origin이라 부른다.
+
+4. 길 연결된 거 확인
+
+   ```python
+   git remote -v
+   ```
+
+5. commit들의 내역을 local에서 remote로 밀어 올려주기
+
+   ```python
+   git push origin master
+   ```
+
+---
+
+### README.md
+
+- README.md 파일은 GitHub에서 대문으로 적용되는 마크다운이다.
+
+- README.md 파일 생성하기
+
+  ```python
+  touch README.md
+  ```
+
+---
+
+### .gitignore
+
+- .gitignore 파일 생성하기
+
+  ```python
+  touch .gitignore
+  ```
+
+- .gitignore 파일 안에 Git이 관리하지 못하도록 할 특정 파일/폴더명을 넣고 저장한다.
+
+- 이 안에 이름이 쓰인 파일은 git init하기 이전처럼 U가 사라지고 까매짐
+
+- [gitignore 작성 참조 사이트](https://www.toptal.com/developers/gitignore)에 들어가서 입력창에 macOS, JupyterNotebooks, Python 입력하고 생성 누르기 -> 전부 복사해서 .gitignore 파일에 붙여넣기하고 저장 -> 그러면 Git이 버전관리 안 해도 되는 파일 목록들을 적어놓은 것이 된다.
+
+- 만약 관리 대상에서 빼고 싶은 파일이 있으면 반드시 git add하기 전에 .gitignore 파일에 작성해야 한다. 만약 .gitignore 파일에 적지 못하고 먼저 add를 했다면? 우선 .gitignore 파일에 빼고자 하는 파일명을 적은 다음에 아래 명령어를 실행하면 관리 대상에서 뺄 수 있다.
+
+  ```python
+  git -rm —cached [파일명]
+  ```
+
+---
+
+### remote -> local 다운로드 (하향식)
+
+* 이제는 GitHub에서 시작해서 GitHub에 있는 걸 똑같이 내 local로 가지고 오기.
+
+1. url을 기준으로 복제를 뜬다. 홈폴더에서 아래 명령어를 실행하면 그 안에 복제된 repository가 생긴다.
+
+   ```python
+   git clone [원격 저장소 주소url] ([repository명])
+   ```
+
+   - 깃허브의 TIL repository 가서 -> 초록색 CODE 버튼 -> HTTPS 복사
+
+     -> [원격 저장소 주소url] 부분에 붙여넣기
+
+   - [repository명]에는 TIL-clone
+
+   - 복제하면 자동으로 길이 있다. (git init 필요 X, git remote add 필요 X)
+
+   - 주의!! 이미 init되어 있는 repository에서는 clone하지 않기
+
+2. 복제한 repository TIL-clone으로 이동해서 길 연결되어 있는 거 확인하기
+
+   ```python
+   cd TIL-clone
+   git remote -v
+   ```
+
+   - 길이 연결되어 있음
+
+3. GitHub의 변경 사항을 가져와서 로컬 저장소를 업데이트하기
+
+   1. 원래의 TIL local repository에서 파일 수정
+
+   2. add -> commit -> push
+
+   3. GitHub에 수정 반영된 거 확인한 후에
+
+   4. 그 변경 사항 내용을 다시 복제한 내 local repository TIL-clone으로 땡겨오기
+
+      ```python
+      cd TIL-clone 
+      code .
+      git pull origin master
+      ```
+
+* 이것이 깃허브로 협업, 백업, 복구하는 것의 기초이다.
+* **push**, **pull** 이 둘이 깃허브의 핵심 기능!!!!!
+
+---
+
+### Conflict 해결
+
+* *하지 말라던 그것…*
+
+1. GitHub 상에서 직접 수정을 하고 commit changes 버튼을 누른다. -> (로컬에는 없는) commit이 GitHub에 하나 더 생긴다.
+
+2. 그 다음 local에서 add -> commit -> push하려고 하면 rejected가 뜬다. (remote 저장소가 내가 local하게 가지고 있지 않은 작업을 가지고 있으니 pull해서 변화들을 통합하라는 내용)
+
+3. <u>push하기 전에는 pull 땡겨서 통합부터 해야 함!!</u> 아래 명령어 실행하기
+
+   ```py
+   git pull origin master
+   ```
+
+4. 옵션이 아래처럼 세 가지 뜬다. 이 중에서 고르기.
+   * local / github / 모두 받아들이기
+
+5. 고른 후에도 동그라미와 느낌표(!)가 떠 있다.
+   * 저장해서 동그라미 없애주기
+   * add -> commit해서 느낌표(!) 없애주기
+
+6. 내역 확인
+
+   ```python
+   git log —oneline
+   ```
+
+7. GitHub에 업로드
+
+   ```python
+   git push origin master
+   ```
+
+* 이것이 협업할 때 자주 만나게 될 충돌 상황이다.
+* 정리하면, rejected -> pull -> 변경 사항들 중 선택 -> 파일 저장 -> add -> commit -> push
+
+---
+
+### 주의사항
+
+* 파일을 생성하고 내용을 작성한 다음에는 꼭 저장을 해서 동그라미를 없앤 후에 add, commit, push 해줘야 한다!
+* commit은 삭제 등이 어렵다. staging area에서 다시 working directory로 돌아가는 것은 쉽지만, commits은 충돌할 수 있기 때문에 건드리지 않는 것이 좋다.
+
