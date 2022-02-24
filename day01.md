@@ -1,1 +1,245 @@
-# 1일차 정리
+# KDT 깃허브특강 1일차 정리 (220223)
+
+## GUI vs CLI
+
+* 유저와 컴퓨터가 만나는 접점(interface) 두 가지 종류
+  * GUI (Graphical User Interface)
+  * CLI (Command Line Interface)
+
+### CLI 명령어
+
+* pwd(present working directory) : 현재 나의 경로 확인
+* control + l : 스크롤 올리기
+* clear
+* cd(change directory) : 나의 현재 경로를 변경. 그냥 cd만 쓰면 디폴트(홈 디렉토리)로 이동
+  * cd .. : 상위 경로로 이동
+  * cd - : 바로 이전 위치로 이동
+* mkdir : 폴더 생성
+* ls(list segments) : 폴더 안에 있는 리스트 확인
+* touch : 파일 생성
+* rm(remove) : 파일 삭제 (되도록 GUI 환경을 이용하자. CLI에서 삭제하면 휴지통으로 안 감..)
+  * rm -r : 폴더 삭제 (옵션 r의 의미: 재귀적으로 폴더 하단 내역도 삭제)
+  * rm -rf : 강제 삭제
+* tab : 파일명/폴더명 자동완성. 여러 개일 때는 리스트 보여줌
+* mv(move) : mv [대상파일] [이동위치(가 없을 때는 대상파일의 이름을 확장자 없이 변경)]
+* open . : 현재 내 위치에서 GUI를 열어줌
+* code . : 현재 내 위치에서 vscode를 열어줌
+
+---
+
+## Visual Studio Code
+
+* 실행방법
+
+  * 터미널에서
+
+  ```python
+  cd [해당 폴더]
+  code .
+  ```
+
+  *  vscode 프로그램을 실행해서 File -> Open Folder
+
+* 실행한 뒤 터미널(bash) 열기
+
+  : control + shift + 백틱(backtick)
+
+---
+
+## Typora
+
+* 마크다운으로 문서 작성할 때 Typora를 사용한다.
+* 마크다운이란?
+  * 마크업 언어가 너무 어려워서 조금 쉽게 바꾸어 놓은 것. 경량 마크업 언어라고 보면 됨.
+  * md 확장자를 가짐.
+  * 왜 쓰나? 쉬워서. 문법, 관리 등 쉽고 범용적이어서.
+  * 모든 마크업 기능을 다 포괄하지는 못하지만, 개발, 분석 관련 커뮤니케이션과 분석을 할 때 아주 큰 역할을 할 것이다.
+
+* Typora 프로그램 실행 후 환경 설정 들어가기
+
+  : Command + 컴마(,) 
+
+### Typora 문법
+
+* \#을 이용해서 제목을 표현. 수준 1(\#)~6(\#\#\#\#\#\#)까지
+* command + / 하면 코드 그대로를 볼 수 있음
+* 순서가 없는 목록은 -, +, *
+* 순서가 있는 목록은 1. 하고 다음줄 가면 2. 됨
+* tab을 이용해서 들여써서 레벨을 낮출 수 있음
+* 글자의 스타일링
+  - *기울임* : \*글자\* 혹은 \_글자\_
+  - **굵게** : \*\*글자\*\* 혹은 \_\_글자\_\_
+  - ***기울이고 굵게*** : \*\*\*글자\*\*\*
+  - ~~취소선~~ : \~\~글자\~\~
+  - <u>밑줄</u> : \<u>글자\</u>
+
+- 코드
+  - 인라인 코드 : 한줄 코드. \`코드\` 처럼 백틱으로 묶어준다.
+  - 블록 코드: 여러줄 코드. \`\`\`처럼 백틱 3개 묶음으로 묶어준다. \`\`\`python 입력하면 파이썬 코드를 인식하는 코드 블록이 생긴다. python 뿐만 아니라 bash, markdown 등도 가능
+- 링크 : \[표시글자\]\(이동주소\)
+- 이미지 : \!\[대체할 텍스트\]\(이미지주소\)
+  - 인터넷에서 이미지 주소 복사, 붙여넣기 할 때 assets 관련 옵션 선택
+
+- 인용 : 주석 혹은 인용문을 작성할 때 사용. \>를 사용해서 인용, \> 갯수에 따라 중첩 가능
+
+* 수평선/구분선 : \-\-\- (- 3개), \*\*\*
+
+* 표
+
+  - Paragraph -> Table -> Insert Table
+
+  - 혹은 option + command + t
+
+  - 파이프(|), 하이픈(-)을 이용하여 행, 열 구분해서 만들 수 있지만 길어지면 복잡.. (command + / 명령어로 표가 어떻게 만들어졌는지 확인 가능)
+
+    | 표   | 만들기 | 연습 |
+    | ---- | ------ | ---- |
+    | a    | 1      | 1    |
+    | b    | 1      | 1    |
+    | c    | 1      | 1    |
+
+---
+
+## Git
+
+* 분산 버전 관리 프로그램
+
+* 파일에 날짜와 시간을 적어서 버전을 관리
+
+* 버전들 간 변경 사항을 기록하는 파일을 만들어서 버전 관리
+
+* 버전들의 용량이 너무 크면, 맨 마지막 파일과 이전 변경 사항들만 남긴다
+
+* Git 사용 목적: 백업, 복구, 협업
+
+* Commit : 초록색 칸 (성실함 증명 가능 -> 포트폴리오 수단이 될 수 있음)
+
+* 맥 OS는 Git이 이미 설치되어 있으므로 그냥 terminal에서 사용하면 됨
+
+* Git의 버전 관리 단위 : 폴더 안의 파일들을 관리
+
+* Git의 버전 관리 방식 : 변경 사항에 대한 기록들과 최종 리포트 하나로 이루어져서 버전을 관리
+
+* Git의 3공간
+
+  | 분장실            | 무대(스테이지)     | 사진 촬영본 |
+  | ----------------- | ------------------ | ----------- |
+  | Working Directory | Staging Area(준비) | Commits     |
+
+  - 나 수정 완료했어 Git아 기록하기 위해 대기시켜줘 -> 무대 위로 올려서 준비 완료한 뒤 -> 기록 : 이것이 Git이 세 공간을 관리해서 기록하는 방식
+
+### Git 초기 설정 (내가 누군지 알려주기)
+
+- 유저네임 설정
+
+  ```bash
+  git config --global user.name eveinseojeon
+  ```
+
+- 유저이메일 설정
+
+  ```bash
+  git config --global user.email jisisjis@gmail.com
+  ```
+
+- 확인
+
+  ```bash
+  git config --global --list
+  # 결과
+  # user.name		eveinseojeon
+  # user.email		jisisjis@gmail.com
+  ```
+
+* 유저네임, 유저이메일 삭제
+
+  ```bash
+  git config --global --unset user.name
+  git config --global --unset user.email
+  ```
+
+### Git 기본 명령어
+
+1. 먼저 폴더를 만들고 해당 폴더로 이동해서 vscode 열기
+
+   ```bash
+   mkdir test
+   cd test
+   code .
+   ```
+
+2. Git 관리 시작
+
+   ```bash
+   git init
+   ```
+
+   - 주의사항!!
+     1. 절대 홈폴더에서 하지 않는다.
+     2. git init한 폴더의 하위 폴더에서 절대 또 git init하지 않는다.
+   - directory -> 저장소(repository)로, 내 컴퓨터의 내 저장공간에서 local repository를 만든 것임.
+   - Git으로 관리를 시작하는 단계. Git아 이제부터 얘 네가 관리해줘.
+
+3. 숨겨진 .git 파일 확인하기
+
+   ```bash
+   ls -a
+   ```
+
+   - .git 파일이 나오면 Git이 관리하고 있다는 의미
+
+4. 파일을 하나 만들기
+
+   ```bash
+   touch a.txt
+   ```
+
+5. 파일들의 상태 확인
+
+   ```bash
+   git status
+   ```
+
+   - Untracked: Git이 아직 관리하지 않은 파일. Staging Area로 올라간 적 X
+
+6. working directory에서 staging area로 파일 올리기
+
+   ```bash
+   git add a.txt
+   
+   # 전체를 다 staging area로 올리는 명령어
+   git add .
+   ```
+
+   - 그러면 a.txt 파일의 상태가 U(Untracked) -> A(Index Added)로 바뀜
+   - Index는 Staging Area의 또 다른 이름
+
+7. staging area에 올라온 파일의 변경 사항을 하나의 커밋으로 저장하기
+
+   ```bash
+   # git commit -m [이유]
+   git commit -m 'first commit’
+   ```
+
+   - U, A 다 사라짐
+
+8. 그 다음 파일을 수정해서 저장하면 파일 상태 M(Modified) 됨
+9. git status 하면 Modified가 빨간색
+10. git add a.txt -> git status 하면 Modified가 빨간색->초록색으로 바뀜
+11. git commit -m 'second commit’
+    - 만약 -m [이유] 옵션을 안 쓰고 git commit 만 썼을 때 빠져나오는 방법 : third commit 쓰고 esc\:wq
+
+12. 지금까지 commit들 확인하기
+
+    ```bash
+    # 한 줄 출력
+    git log --oneline
+    ```
+
+    - git log만 써서 빠져나오지 못할 때는 q 누르면 됨
+
+## 추가로 간단 정리
+
+- git status : 3공간에서 파일이 어떻게 변했는지
+- git log : commit, 즉 기록들의 내역을 보여주는 것
+
