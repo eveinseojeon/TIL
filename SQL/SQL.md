@@ -103,7 +103,7 @@ value **IN** (option1, option2, ...)
 
 ---
 
-## LIKE, ILIKE
+### LIKE, ILIKE
 
 - 패턴 매칭 연산자
 - 와일드카드 문자(%, _ 등)를 사용해서 문자열 데이터에 대해 패턴 매칭 수행
@@ -111,6 +111,38 @@ value **IN** (option1, option2, ...)
 - **LIKE**는 대소문자를 구분하고, **ILIKE**는 구분 안 함
 
 ---
+
+### 집계 함수(Aggregate functions)
+
+- **AVG**(), **COUNT**(), **MAX**(), **MIN**(), **SUM**()
+
+- 오직 **SELECT**절이나 **HAVING**절에서만 호출됨
+- **AVG**()는 소수점까지 길게 반환하므로 **ROUND**()와 함께 사용
+- **COUNT**()는 행의 개수를 반환하므로 열 이름을 안 넣고 **COUNT**(*)를 해도 항상 같은 결과
+
+---
+
+### GROUP BY
+
+**SELECT** category_col, **AGG**(data_col) **FROM** table **WHERE** category_col != 'A' **GROUP BY** category_col;
+
+- **GROUP BY**절은 **FROM**문 바로 뒤 또는 **WHERE**문 바로 뒤에 와야 함
+- **GROUP BY**로 묶이는 열들의 순서는 중요하지 않음. 그러나 대부분의 경우 **SELECT**문과 **GROUP BY**문의 순서를 동일하게 지정
+- **DATE**()는 타임스탬프 정보 중 날짜 부분만 추출하는 함수
+
+---
+
+### HAVING
+
+
+
+
+
+
+
+
+
+
 
 
 
