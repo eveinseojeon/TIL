@@ -134,11 +134,27 @@ value **IN** (option1, option2, ...)
 
 ### HAVING
 
+- 집계가 수행된 "이후에" <u>집계 결과를 바탕으로 자료를 필터링</u> (**WHERE**문은 필터링을 먼저 함)
+- 실행 순서: **WHERE** -> **GROUP BY** -> 집계 -> **HAVING**
+- **GROUP BY**를 통해 집계되는 것에만 적용됨
+
+---
+
+### AS
+
+**SELECT** column **AS** new_name **FROM** table
+
+**SELECT** **SUM**(column) **AS** new_name **FROM** table
+
+- 열이나 결과에 별칭(대체 이름)을 부여
+- <u>순전히 data output의 가독성을 위한 것</u>으로, 특히 열에 함수를 적용할 때 유용함
+- **AS** 연산자는 쿼리의 맨 마지막에 실행됨. 별칭들은 맨 마지막에 할당되기 때문에 별칭으로는 필터링을 할 수 없음 -> <u>**WHERE**, **GROUP BY**, **HAVING**, 조건, 비교 연산자 등에서는 별칭을 사용할 수 없음. 오직 **SELECT**에서만 사용할 수 있음.</u>
+
+---
 
 
 
-
-
+ 
 
 
 
