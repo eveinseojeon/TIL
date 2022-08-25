@@ -142,9 +142,9 @@ value **IN** (option1, option2, ...)
 
 ### AS
 
-**SELECT** column **AS** new_name **FROM** table
+**SELECT** column **AS** new_name **FROM** table;
 
-**SELECT** **SUM**(column) **AS** new_name **FROM** table
+**SELECT** **SUM**(column) **AS** new_name **FROM** table;
 
 - 열이나 결과에 별칭(대체 이름)을 부여
 - <u>순전히 data output의 가독성을 위한 것</u>으로, 특히 열에 함수를 적용할 때 유용함
@@ -152,9 +152,78 @@ value **IN** (option1, option2, ...)
 
 ---
 
+### JOIN
+
+- 여러 테이블을 하나로 결합하는 연산
+- **OUTER JOIN**의 종류에 따라 결합되는 테이블 중 하나에만 있는 정보를 처리하는 방식을 지정
+
+---
+
+#### INNER JOIN
+
+**SELECT** * **FROM** tableA **INNER JOIN** tableB **ON** tableA.col_match = tableB.col_match;
+
+- 두 테이블 모두에서 매칭되는 값만 결과로 출력.
+- 벤다이어그램이 대칭이므로 두 테이블 순서, 열 매칭 순서를 바꿔도 결과는 같음.
+- **SELECT** *을 하면 col_match 열이 두 번 중복됨. 중복을 제거하기 위해 **SELECT** 뒤에 원하는 열들을 지정할 때 두 테이블에서 공유하는 col_match 열의 경우 tableA.col_match와 같이 그 열을 참조하는 테이블이 어떤 것인지 지정해야 함.
+- **JOIN**만 써있으면 **INNER**가 생략된 **INNER JOIN**
+
+---
+
+#### FULL OUTER JOIN
+
+**SELECT** * **FROM** tableA **FULL OUTER JOIN** tableB **ON** tableA.col_match = tableB.col_match;
+
+- 두 테이블에 모두 있든 한 테이블에만 있든 상관없이 모든 것을 포함
+- 벤다이어그램이 대칭이므로 두 테이블 순서, 열 매칭 순서를 바꿔도 결과는 같음
+
+**SELECT** * **FROM** tableA **FULL OUTER JOIN** tableB **ON** tableA.col_match = tableB.col_match **WHERE** tableA.colA **IS** null **OR** tableB.colB **IS** null;
+
+- **JOIN**을 실행한 후에 **WHERE**문을 써서 추가로 필터링
+- 
+
+---
+
+#### LEFT (OUTER) JOIN
+
+**SELECT** * **FROM** tableA **LEFT OUTER JOIN** tableB **ON** tableA.col_match = tableB.col_match;
+
+- 더이상 벤다이어그램이 대칭이 아니며, 순서가 중요
+- 테이블A에만 있는 것, 두 테이블 모두에 있는 것을 출력. 테이블B에만 있는 것은 가져오지 않음.
+
+**SELECT** * **FROM** tableA **LEFT OUTER JOIN** tableB **ON** tableA.col_match = tableB.col_match **WHERE** tableB.colB **IS** null;
+
+- 테이블A에만 고유한 항목을 구할 수 있음
+
+---
+
+#### RIGHT (OUTER) JOIN
+
+**SELECT** * **FROM** tableA **RIGHT OUTER JOIN** tableB **ON** tableA.col_match = tableB.col_match;
+
+- **LEFT OUTER JOIN**의 테이블 순서를 바꾼 것과 정확히 같음. y축을 따라 뒤집어진 것.
+- 테이블B에만 있는 것, 두 테이블 모두에 있는 것을 출력. 테이블A에만 있는 것은 가져오지 않음.
+
+**SELECT** * **FROM** tableA **RIGHT OUTER JOIN** tableB **ON** tableA.col_match = tableB.col_match **WHERE** tableA.colA **IS** null;
+
+- 테이블B에만 고유한 항목을 구할 수 있음
+
+---
+
+### UNION
+
+**SELECT** col_name(s) **FROM** table1 **UNION** **SELECT** col_name(s) **FROM** table2;
+
+- **UNION** 연산자를 사용하면 2개 이상의 **SELECT**문의 결과 세트를 결합할 수 있음. **JOIN**과 **UNION**의 기본적인 차이는 **UNION**은 두 결과를 직접 붙인다는 것. 두 **SELECT**문의 결과를 서로의 바로 위에서 붙여줌.
+- 서로의 바로 위에 결과를 쌓을 수 있도록 열이 일치해야 함
+
+**SELECT** col_name(s) **FROM** table1 **UNION** **SELECT** col_name(s) **FROM** table2 **ORDER BY** col;
+
+- 특정 열을 기준으로 자료 정렬도 가능
+
+---
 
 
- 
 
 
 
@@ -164,11 +233,13 @@ value **IN** (option1, option2, ...)
 
 
 
+---
 
+## 메모
 
+41. FULL OUTER JOIN 다시 듣기 (8:19~)
 
-
-
+45~
 
 
 
