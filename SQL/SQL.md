@@ -134,6 +134,8 @@ value **IN** (option1, option2, ...)
 
 ### HAVING
 
+**SELECT** category_col, **AGG**(data_col) **FROM** table **WHERE** category_col != 'A' **GROUP BY** category_col **HAVING** **AGG**(data_col) > 10;
+
 - 집계가 수행된 "이후에" <u>집계 결과를 바탕으로 자료를 필터링</u> (**WHERE**문은 필터링을 먼저 함)
 - 실행 순서: **WHERE** -> **GROUP BY** -> 집계 -> **HAVING**
 - **GROUP BY**를 통해 집계되는 것에만 적용됨
