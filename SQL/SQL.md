@@ -232,7 +232,7 @@ value **IN** (option1, option2, ...)
 
 **SHOW** **ALL**;
 
-- name, setting, description 열이 뜸
+- name, setting, description 열을 보여줌
 
 **SHOW** TIMEZONE;
 
