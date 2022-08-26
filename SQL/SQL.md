@@ -154,14 +154,14 @@ value **IN** (option1, option2, ...)
 
 ---
 
-### JOIN
+## JOIN
 
 - 여러 테이블을 하나로 결합하는 연산
 - **OUTER JOIN**의 종류에 따라 결합되는 테이블 중 하나에만 있는 정보를 처리하는 방식을 지정
 
 ---
 
-#### INNER JOIN
+### (INNER) JOIN
 
 **SELECT** * **FROM** tableA **INNER JOIN** tableB **ON** tableA.col_match = tableB.col_match;
 
@@ -172,7 +172,7 @@ value **IN** (option1, option2, ...)
 
 ---
 
-#### FULL OUTER JOIN
+### FULL OUTER JOIN
 
 **SELECT** * **FROM** tableA **FULL OUTER JOIN** tableB **ON** tableA.col_match = tableB.col_match;
 
@@ -186,7 +186,7 @@ value **IN** (option1, option2, ...)
 
 ---
 
-#### LEFT (OUTER) JOIN
+### LEFT (OUTER) JOIN
 
 **SELECT** * **FROM** tableA **LEFT OUTER JOIN** tableB **ON** tableA.col_match = tableB.col_match;
 
@@ -199,7 +199,7 @@ value **IN** (option1, option2, ...)
 
 ---
 
-#### RIGHT (OUTER) JOIN
+### RIGHT (OUTER) JOIN
 
 **SELECT** * **FROM** tableA **RIGHT OUTER JOIN** tableB **ON** tableA.col_match = tableB.col_match;
 
@@ -225,6 +225,74 @@ value **IN** (option1, option2, ...)
 
 ---
 
+## Timestamp
+
+- TIME, DATE, TIMESTAMP, TIMESTAMPTZ
+- 시간, 날짜, 표준시간대 정보들 중 무엇을 기록할지 장기적 관점에서 신중하게 고려하여 결정해야 함. 나중에 정보 추출을 할 수는 있지만 되돌아가서 더할 수는 없기 때문에.
+
+**SHOW** **ALL**;
+
+- name, setting, description 열이 뜸
+
+**SHOW** TIMEZONE;
+
+- 현재 내가 Asia/Seoul의 표준시간대에서 작업하고 있음을 보여줌
+
+**SELECT** NOW();
+
+- 표준시간대의 타임스탬프라는 설명과 함께 날짜, 시간, 표준시간대([그리니치 평균시](https://ko.wikipedia.org/wiki/%EA%B7%B8%EB%A6%AC%EB%8B%88%EC%B9%98_%ED%8F%89%EA%B7%A0%EC%8B%9C)) 정보를 보여줌
+
+**SELECT** TIMEOFDAY();
+
+- NOW와 거의 같은 정보를 알려주는데 <u>문자열로 된 정보</u>라서 가독성이 좋고 저장도 더 쉬움. 특정 타임스탬프 형식은 아님.
+- 요일, 월, 일, 시간, 연, 표준시간대 정보를 보여줌
+
+**SELECT** **CURRENT_TIME **;
+
+- NOW의 서브셋으로, 현 시간을 보여줌
+
+**SELECT** **CURRENT_DATE **;
+
+- NOW의 서브셋으로, 현 날짜(연, 월, 일)를 보여줌
+
+---
+
+### EXTRACT
+
+**SELECT** **EXTRACT**(**YEAR** **FROM** date_col) **AS** new_name **FROM** table;
+
+- 데이터 값의 서브 컴포넌트를 추출하되 연(YEAR), 월(MONTH), 일(DAY), 주(WEEK), 분기(QUARTER), 요일(dow: day of week)별로 추출할 수 있음
+
+---
+
+### AGE
+
+**SELECT** AGE(date_col) **FROM** table;
+
+- 해당 타임스탬프 내에서 현재까지의 시기를 계산해서 알려줌
+
+---
+
+### TO_CHAR
+
+**SELECT** TO_CHAR(date_col, 'mm-dd-yyyy') **FROM** table;
+
+- 하나의 데이터 유형을 문자 유형으로 바꿔주는 일반 함수
+- 타임스탬프 서식 작성을 할 때 매우 유용함
+- [데이터 유형 포매팅 함수 PostgreSQL 공식 문서](https://www.postgresql.org/docs/current/functions-formatting.html) 참조
+
+---
+
+### 수리 함수와 연산자
+
+- [수리 함수와 연산자 PostgreSQL 공식 문서](https://www.postgresql.org/docs/current/functions-math.html) 참조
+
+---
+
+### 문자열 함수와 연산자
+
+
+
 
 
 
@@ -241,7 +309,7 @@ value **IN** (option1, option2, ...)
 
 41. FULL OUTER JOIN 다시 듣기 (8:19~)
 
-45~
+52~
 
 
 
