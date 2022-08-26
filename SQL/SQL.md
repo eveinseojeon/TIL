@@ -1,4 +1,4 @@
-# Udemy <데이터 역량 강화를 위한 SQL 부트캠프 2022>
+# [Udemy <데이터 역량 강화를 위한 SQL 부트캠프 2022>](https://www.udemy.com/course/best-sql-2022/)
 
 -> PostgreSQL, PgAdmin 사용
 
