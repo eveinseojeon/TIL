@@ -247,11 +247,11 @@ value **IN** (option1, option2, ...)
 - NOW와 거의 같은 정보를 알려주는데 <u>문자열로 된 정보</u>라서 가독성이 좋고 저장도 더 쉬움. 특정 타임스탬프 형식은 아님.
 - 요일, 월, 일, 시간, 연, 표준시간대 정보를 보여줌
 
-**SELECT** **CURRENT_TIME **;
+**SELECT** **CURRENT_TIME**;
 
 - NOW의 서브셋으로, 현 시간을 보여줌
 
-**SELECT** **CURRENT_DATE **;
+**SELECT** **CURRENT_DATE**;
 
 - NOW의 서브셋으로, 현 날짜(연, 월, 일)를 보여줌
 
