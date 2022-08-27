@@ -291,9 +291,43 @@ value **IN** (option1, option2, ...)
 
 ### 문자열 함수와 연산자
 
+- [문자열 함수와 연산자 PostgreSQL 공식 문서](https://www.postgresql.org/docs/current/functions-string.html) 참조
 
+---
 
+## 서브 쿼리
 
+- 서브 쿼리를 쓰면 더 복잡한 쿼리를 만들 수 있다. 다른 쿼리의 결과에 대해 쿼리를 실행하거나 다른 쿼리의 결과를 사용할 수 있음. "단독" 쿼리 결과를 얻고자 서브 쿼리 사용 가능
+
+**SELECT** student, grade **FROM** test_scores **WHERE** grade > (**SELECT** **AVG**(grade) **FROM** test_scores);
+
+- 괄호 내 서브 쿼리가 먼저 계산됨
+- <u>복잡한 쿼리일수록 길게 쓰기보다 서브 쿼리를 활용할 것!</u>
+- 서브 쿼리의 결과가 단독 값으로 도출되면 비교 연산자를 쓸 수 있으나, 서브 쿼리의 결과가 다양한 값으로 도출되면 **IN** 연산자를 써야 함
+
+---
+
+### EXISTS
+
+**SELECT** column **FROM** table **WHERE** **EXISTS**(**SELECT** column **FROM** table **WHERE** condition);
+
+- 서브 쿼리에서 행의 존재를 테스트하는 데 사용됨
+- 보통 서브 쿼리가 **EXISTS** 함수 뒤 괄호에 입력되어, 어떤 행이 서브 쿼리로 도출되었는지 확인
+- 행의 여부에 따라 참, 거짓으로 결괏값이 나옴
+
+---
+
+### 셀프 조인
+
+**SELECT** tableA.col, tableB.col **FROM** table **AS** tableA **JOIN** table **AS** tableB **ON** tableA.some_col = tableB.other_col;
+
+- 테이블이 그 자체에 JOIN되어있는 쿼리
+- 같은 테이블 내에 여러 행의 열 속 값들을 비교할 때 유용함
+- 같은 테이블의 두 복사본의 JOIN처럼 보일 수 있으나, 테이블은 사실 복사된 게 아니고 SQL이 그래 보이게 한 것이다.
+- 셀프 조인을 위한 특별 키워드 없다. 두 부분에 동시에 있는 동일한 테이블에서 그냥 표준 JOIN 구문.
+- 셀프 조인을 사용할 때는 테이블에 별칭을 꼭 사용해라.
+
+---
 
 
 
@@ -305,11 +339,19 @@ value **IN** (option1, option2, ...)
 
 ---
 
-## 메모
+## MEMO
 
-41. FULL OUTER JOIN 다시 듣기 (8:19~)
+- 테이블이 들어있는 Schemas가 public이 아닌 경우, 테이블 호출할 때 Schemas의 이름과 온점(.)을 붙여줘야 함
 
-52~
+  예시) SELECT * FROM cd.bookings
+
+---
+
+## 다시 들을 부분
+
+41. FULL OUTER JOIN (8:19~)
+
+53. 서브 쿼리 (12:13~)
 
 
 
