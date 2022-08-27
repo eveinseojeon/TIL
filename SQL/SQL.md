@@ -343,7 +343,7 @@ value **IN** (option1, option2, ...)
 
 - 테이블이 들어있는 Schemas가 public이 아닌 경우, 테이블 호출할 때 Schemas의 이름과 온점(.)을 붙여줘야 함
 
-  예시) SELECT * FROM cd.bookings
+  Ex) **SELECT** * **FROM** cd.bookings;
 
 ---
 
