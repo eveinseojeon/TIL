@@ -91,7 +91,7 @@ value **BETWEEN** low **AND** high
 - **WHERE**문 뒤에 사용하는 조건문으로 쓰임
 - 양쪽의 엔드포인트 low값과 high값 모두 포함
 - value >= low **AND** value <= high와 같음
-- 타임스탬프 정보를 처리할 때는 'YYYY-MM-DD' 형식으로 쓰되, 날짜, 시간, 분 이하가 모두 포함됨. PostgreSQL에서 하루의 시간이 0:00에 시작되는지 24:00에 시작되는지 정해야 함. 이것이 논리에 실질적인 영향을 미침. 원하는 결과가 나오는지 꼼꼼하게 확인해봐야 함
+- 타임스탬프 정보를 처리할 때는 'YYYY-MM-DD' 형식으로 쓰되, 날짜, 시간, 분 이하가 모두 포함됨. PostgreSQL에서 하루의 시간이 0:00에 시작되는지 24:00에 시작되는지 정해야 함. 이것이 논리에 실질적인 영향을 미침. 원하는 결과가 나오는지 꼼꼼하게 확인해봐야 함. **BETWEEN** 연산자에서 이런 문제가 생길 수 있음. 부등호를 사용하면 해결됨.
 
 ---
 
@@ -150,7 +150,7 @@ value **IN** (option1, option2, ...)
 
 - 열이나 결과에 별칭(대체 이름)을 부여
 - <u>순전히 data output의 가독성을 위한 것</u>으로, 특히 열에 함수를 적용할 때 유용함
-- **AS** 연산자는 쿼리의 맨 마지막에 실행됨. 별칭들은 맨 마지막에 할당되기 때문에 별칭으로는 필터링을 할 수 없음 -> <u>**WHERE**, **GROUP BY**, **HAVING**, 조건, 비교 연산자 등에서는 별칭을 사용할 수 없음. 오직 **SELECT**에서만 사용할 수 있음.</u>
+- <u>**AS** 연산자는 쿼리의 맨 마지막에 실행됨.</u> 별칭들은 맨 마지막에 할당되기 때문에 별칭으로는 필터링을 할 수 없음 -> <u>**WHERE**, **GROUP BY**, **HAVING**, 조건, 비교 연산자 등에서는 별칭을 사용할 수 없음. 오직 **SELECT**에서만 사용할 수 있음.</u>
 
 ---
 
@@ -182,7 +182,6 @@ value **IN** (option1, option2, ...)
 **SELECT** * **FROM** tableA **FULL OUTER JOIN** tableB **ON** tableA.col_match = tableB.col_match **WHERE** tableA.colA **IS** null **OR** tableB.colB **IS** null;
 
 - **JOIN**을 실행한 후에 **WHERE**문을 써서 추가로 필터링
-- 
 
 ---
 
@@ -229,6 +228,7 @@ value **IN** (option1, option2, ...)
 
 - TIME, DATE, TIMESTAMP, TIMESTAMPTZ
 - 시간, 날짜, 표준시간대 정보들 중 무엇을 기록할지 장기적 관점에서 신중하게 고려하여 결정해야 함. 나중에 정보 추출을 할 수는 있지만 되돌아가서 더할 수는 없기 때문에.
+- 타임스탬프 정보에 **MAX**, **MIN**, 비교 연산자 등을 사용할 수 있음
 
 **SHOW** **ALL**;
 
@@ -329,6 +329,52 @@ value **IN** (option1, option2, ...)
 
 ---
 
+## 데이터베이스 및 테이블 만들기
+
+### 데이터 유형
+
+- Boolean
+  - True, False
+- Character
+  - char, varchar, text
+- Numeric
+  - integer, floating-point number
+- Temporal
+  - time, date, timestamp, timestamptz, interval
+- UUID(Universally Unique Identifiers)
+- Array
+  - 문자열, 숫자의 배열을 저장
+- JSON
+- HStore key-value pair
+- 그 외 network address, geometric data 등의 특수 유형
+
+---
+
+### 데이터베이스 및 테이블을 만들 때 고려 사항
+
+- 데이터가 어떻게 저장될지를 고려해 데이터 유형을 선택하는 데에 유의해야 함
+
+- 어떤 데이터 유형이 있는지, 데이터 유형의 한계는 무엇인지 [데이터 유형 PostgreSQL 공식 문서](https://www.postgresql.org/docs/12/datatype.html)에서 확인하고 고르기!
+
+- <u>온라인에서 최선의 관행을 찾는 것이 가장 좋음</u>
+
+  Ex) 'How to store phone number PostgreSQL' 구글링
+
+- 데이터베이스를 만들고 오래 보관하려고 한다면 사용하지 않는 히스토리 정보를 삭제할 것. 그러나 백업은 불가능. 지우고 나면 돌아가서 정보를 추가할 수 없다.
+
+---
+
+### 기본키 및 외래키
+
+- 기본키: 테이블에서 열을 특별하게 지칭하기 위해 사용하는 열 또는 열 그룹
+- 
+
+
+
+
+
+
+
 
 
 
@@ -341,7 +387,7 @@ value **IN** (option1, option2, ...)
 
 ## MEMO
 
-- 테이블이 들어있는 Schemas가 public이 아닌 경우, 테이블 호출할 때 Schemas의 이름과 온점(.)을 붙여줘야 함
+- 테이블이 들어있는 Schemas가 public이 아닌 경우, Schemas의 이름과 온점(.)을 테이블 앞에 붙여줘야 함
 
   Ex) **SELECT** * **FROM** cd.bookings;
 
@@ -352,6 +398,130 @@ value **IN** (option1, option2, ...)
 41. FULL OUTER JOIN (8:19~)
 
 53. 서브 쿼리 (12:13~)
+
+61~
+
+
+
+
+
+---
+
+## 평가 시험 2
+
+### Q1
+
+SELECT * FROM cd.facilities;
+
+### Q2
+
+SELECT name, membercost FROM cd.facilities;
+
+### Q3
+
+SELECT * FROM cd.facilities
+
+WHERE membercost != 0;
+
+### Q4
+
+SELECT facid, name, membercost, monthlymaintenance
+
+FROM cd.facilities
+
+WHERE membercost != 0
+
+AND membercost < monthlymaintenance/50;
+
+### Q5
+
+SELECT * FROM cd.facilities
+
+WHERE name LIKE '%Tennis%';
+
+### Q6
+
+SELECT * FROM cd.facilities
+
+WHERE facid IN (1, 5);
+
+### Q7
+
+SELECT memid, surname, firstname, joindate
+
+FROM cd.members
+
+WHERE joindate >= '2012-09-01';
+
+### Q8
+
+SELECT DISTINCT(surname) FROM cd.members
+
+ORDER BY surname
+
+LIMIT 10;
+
+### Q9
+
+SELECT MAX(joindate) FROM cd.members;
+
+### Q10
+
+SELECT COUNT(*) FROM cd.facilities
+
+WHERE guestcost >= 10;
+
+### Q11
+
+SELECT facid, SUM(slots) AS total_slots
+
+FROM cd.bookings
+
+WHERE (SELECT TO_CHAR(starttime, 'yyyy-mm')) = '2012-09'
+
+GROUP BY facid
+
+ORDER BY SUM(slots);
+
+### Q12
+
+SELECT facid, SUM(slots) AS total_slots
+
+FROM cd.bookings
+
+GROUP BY facid
+
+HAVING SUM(slots) > 1000
+
+ORDER BY facid;
+
+### Q13
+
+SELECT starttime, name
+
+FROM cd.bookings AS B
+
+INNER JOIN cd.facilities AS F
+
+ON B.facid = F.facid
+
+WHERE name LIKE 'Tennis Court%'
+
+AND (SELECT TO_CHAR(starttime, 'yyyy-mm-dd')) = '2012-09-21'
+
+ORDER BY starttime;
+
+### Q14
+
+SELECT starttime, firstname, surname
+
+FROM cd.bookings AS B
+
+INNER JOIN cd.members AS M
+
+ON B.memid = M.memid
+
+WHERE firstname = 'David' AND surname = 'Farrell';
 
 
 
