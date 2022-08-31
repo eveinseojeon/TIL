@@ -369,7 +369,7 @@ value **IN** (option1, option2, ...)
 - 기본키(primary key)
   - 테이블에서 모든 열을 고유하게 식별하기 위해 사용하는 열(또는 열 그룹)
   - integer based, unique and non-null column
-  - 데이터 유형은 항상 **SERIAL**(smallserial, serial, bigserial 있음)
+  - 데이터 유형은 항상 **SERIAL**로, 행이 삭제되었거나 삽입 명령에 에러가 있었던 시도까지 다 계산한다는 점에서 유용하다.
   - 열에 [PK]라고 적혀 있음
   - <u>테이블을 JOIN할 때 어떤 열을 사용해야 할지 쉽게 알려주기 때문에 중요!</u>
 - 외래키(foreign key)
@@ -402,16 +402,20 @@ value **IN** (option1, option2, ...)
 - 테이블에서 열에 적용되는 규칙. 테이블의 어떤 것에든 제약 조건을 걸 수 있다.
 - 데이터베이스에 유효하지 않은 데이터가 쓰이지 않도록 방지할 수 있음 -> 데이터베이스의 데이터에 대한 정확도와 신뢰도를 보장
 - column constraints: 개별 열에 적용됨
-  - **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, FOREIGN KEY, **REFERENCES**, CHECK, EXCLUSION 등
+  - **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, FOREIGN KEY, **REFERENCES**, **CHECK**, EXCLUSION 등
 - table constraints: 전체 테이블에 적용됨
-  - CHECK (condition), REFERENCES, UNIQUE (column list), PRIMARY KEY (column list) 등
+  - **CHECK** (condition), REFERENCES, UNIQUE (column list), PRIMARY KEY (column list) 등
 
 ---
 
-### CREATE
+### 데이터베이스 만들기
 
 - 왼쪽 단에서 Servers -> PostgreSQL 14 -> Databases 우클릭 -> Create -> Database -> 이름 입력하고 저장 -> 방금 생긴 데이터베이스 우클릭하여 Refresh
-- Query Tool 열어서 SQL 명령으로 테이블을 만들 수 있다.
+- 그 다음 Query Tool 열어서 SQL 명령으로 테이블을 만들 수 있다.
+
+---
+
+### CREATE TABLE
 
 **CREATE** **TABLE** table_name(
 
@@ -429,9 +433,158 @@ value **IN** (option1, option2, ...)
 
 ### INSERT
 
+**INSERT** **INTO** table(column1, column2, ...) **VALUES** (value1, value2, ...), (value1, value2, ...), ...;
 
+- 테이블에 행 추가
 
+**INSERT** **INTO** table(column1, column2, ...) **SELECT** column1, column2, ... **FROM** another_table **WHERE** condition;
 
+- 다른 테이블의 값을 삽입
+
+- 삽입되는 행의 값들은 제약 조건들을 포함하여 테이블에 일치해야 함. 다른 테이블에서 정보를 가져와 현재 사용하는 테이블에 삽입할 때는 열끼리 데이터 유형, 제약 조건 등이 동일한지 확인해야 한다. 제약 조건을 위반하면 정보 삽입 불가능.
+- 기본키(PK)와 연관된 SERIAL 열은 자동으로 업데이트되므로 값이 없어도 됨.
+
+---
+
+### UPDATE
+
+**UPDATE** table **SET** column1 = value1, column2 = value2, ... (**WHERE** condition);
+
+- 테이블의 값을 바꿈
+
+**UPDATE** table **SET** column1 = column2 (**WHERE** condition);
+
+- 다른 열의 값을 넣을 수도 있음
+
+**UPDATE** tableA **SET** original_col = TableB.new_col **FROM** tableB **WHERE** tableA.id = tableB.id;
+
+- 다른 테이블의 값을 사용할 수도 있음
+
+- JOIN 키워드는 없지만 **UPDATE JOIN**이라고 불림
+
+**UPDATE** table **SET** column1 = column2 **RETURNING** column3, column4;
+
+- 영향을 받은, 즉 값이 바뀐 행들에서 column3, column4 값을 반환함
+
+---
+
+### DELETE
+
+**DELETE** **FROM** table **WHERE** condition (**RETURNING** column1, column2);
+
+- 테이블에서 행 삭제
+- **RETURNING**을 사용해서 삭제된 값을 확인 가능
+
+**DELETE** **FROM** tableA **USING** tableB **WHERE** tableA.id = tableB.id;
+
+- 다른 테이블에 존재하는지 여부에 따라 행 삭제
+- 두 테이블에서 값이 같다면 테이블A에서 그 행을 삭제. UPDATE JOIN과 비슷함
+
+**DELETE** **FROM** table;
+
+- 테이블의 모든 행 삭제
+
+---
+
+### ALTER TABLE
+
+- 이미 존재하는 테이블 구조를 바꿈
+- [테이블 바꾸기 PostgreSQL 공식 문서](https://www.postgresql.org/docs/current/sql-altertable.html) 참조
+- 테이블 이름 바꾸기, 열 이름 바꾸기, 열 추가, 삭제, 열의 제약 조건 추가, 삭제, 열의 디폴트 값 세팅, 삭제, 열의 데이터 유형 바꾸기, CHECK 제약 조건 추가 등         
+
+**ALTER** **TABLE** table_name **RENAME** **TO** new_table_name;
+
+**ALTER** **TABLE** table_name **RENAME** **COLUMN** col_name **TO** new_col_name;
+
+**ALTER** **TABLE** table_name **ADD** **COLUMN** new_col **TYPE**;
+
+**ALTER** **TABLE** table_name **DROP** **COLUMN** col _name;
+
+**ALTER** **TABLE** table_name **ALTER** **COLUMN** col _name **SET** constraint;
+
+**ALTER** **TABLE** table_name **ALTER** **COLUMN** col _name **DROP** constraint;
+
+**ALTER** **TABLE** table_name **ALTER** **COLUMN** col _name **SET** **DEFAULT** value;
+
+**ALTER** **TABLE** table_name **ALTER** **COLUMN** col _name **DROP** **DEFAULT**;
+
+---
+
+### DROP
+
+**ALTER** **TABLE** table_name **DROP** **COLUMN** col _name;
+
+**ALTER** **TABLE** table_name **DROP** **COLUMN** col _name **CASCADE**;
+
+- 테이블에서 열을 완전 삭제
+- 하지만 views, triggers, stored procedures 등에서 사용되는 열까지 삭제하지는 않음.  **CASCADE**를 사용해야 열과 연관되는 모든 dependency들까지 삭제할 수 있음.
+
+**ALTER** **TABLE** table_name **DROP** **COLUMN** **IF** **EXISTS** col _name;
+
+- 존재하지 않는 열을 삭제하려 하면 에러 나므로 **IF EXISTS**로 에러 방지
+
+---
+
+### CHECK 제약 조건
+
+- 특정 조건에 맞춤화된 제약 조건을 쓸 수 있음
+
+**CREATE** **TABLE** table_name(
+
+​    column_name **TYPE** **CHECK** (condition)
+
+);
+
+---
+
+## 조건 표현과 연산자
+
+### CASE
+
+- 특정 조건이 충족되었을 때 SQL 코드를 실행. 다른 프로그래밍 언어의 IF/ELSE와 비슷하다.
+
+- 일반 CASE 구문: 조건문을 유연하게 사용 가능. <u>특히 **WHEN**, **THEN** 1, **ELSE** 0과 함께 잘 쓰인다.</u>
+
+  **CASE**
+
+  ​    **WHEN** (condition1) **THEN** result1
+
+  ​    **WHEN** (condition2) **THEN** result2
+
+  ​    **ELSE** result3
+
+  **END**
+
+- CASE 표현 구문: 가능한 값을 목록화하여 값이 동일한지 대량으로 확인해야 할 때 유용함
+
+  **CASE** expression
+
+  ​    **WHEN** value1 **THEN** result1
+
+  ​    **WHEN** value2 **THEN** result2
+
+  ​    **ELSE** result3
+
+  **END**
+
+---
+
+### COALESCE
+
+**COALESCE** (arg_1, arg_2, ..., arg_n);
+
+- argument들 중에서 NULL이 아닌 첫 argument를 반환
+
+- 모든 argument들이 NULL이면 NULL 반환
+- 무한한 수의 argument들을 쓸 수 있음
+
+**SELECT** item, (price - **COALESCE**(discount, 0)) **AS** final **FROM** table;
+
+- 원래 테이블을 바꾸지 않고 NULL 자리에 다른 값(0)으로 치환해서 연산을 수행할 때 유용함
+
+---
+
+### CAST
 
 
 
@@ -459,7 +612,7 @@ value **IN** (option1, option2, ...)
 
 53. 서브 쿼리 (12:13~)
 
-64~
+76~
 
 
 
@@ -467,7 +620,7 @@ value **IN** (option1, option2, ...)
 
 제약 조건 예시들 굵은 글씨 수정
 
-CREATE 일반 구문 확인
+CREATE TABLE일반 구문 확인
 
 
 
@@ -590,6 +743,44 @@ INNER JOIN cd.members AS M
 ON B.memid = M.memid
 
 WHERE firstname = 'David' AND surname = 'Farrell';
+
+---
+
+## 평가 시험 3
+
+### Q1
+
+CREATE TABLE students(
+	student_id SERIAL PRIMARY KEY,
+	first_name VARCHAR(50) NOT NULL,
+	last_name VARCHAR(50) NOT NULL,
+	homeroom_number SMALLINT,
+	phone VARCHAR(50) NOT NULL UNIQUE,
+	email VARCHAR(250) UNIQUE,
+	graduation_year SMALLINT
+);
+
+### Q2
+
+CREATE TABLE teachers(
+	teacher_id SERIAL PRIMARY KEY,
+	first_name VARCHAR(50) NOT NULL,
+	last_name VARCHAR(50) NOT NULL,
+	homeroom_number SMALLINT,
+	department VARCHAR(50),
+	email VARCHAR(250) UNIQUE,
+	phone VARCHAR(50) UNIQUE
+);
+
+### Q3
+
+INSERT INTO students(first_name, last_name, homeroom_number, phone, graduation_year)
+VALUES ('Mark', 'Watney', 5, '777-555-1234', 2035);
+
+### Q4
+
+INSERT INTO teachers(first_name, last_name, homeroom_number, department, email, phone)
+VALUES ('Jonas', 'Salk', 5, 'Biology', 'jsalk@school.org', '777-555-4321');
 
 
 
