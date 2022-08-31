@@ -751,35 +751,53 @@ WHERE firstname = 'David' AND surname = 'Farrell';
 ### Q1
 
 CREATE TABLE students(
-	student_id SERIAL PRIMARY KEY,
-	first_name VARCHAR(50) NOT NULL,
-	last_name VARCHAR(50) NOT NULL,
-	homeroom_number SMALLINT,
-	phone VARCHAR(50) NOT NULL UNIQUE,
-	email VARCHAR(250) UNIQUE,
-	graduation_year SMALLINT
+
+​    student_id SERIAL PRIMARY KEY,
+
+​    first_name VARCHAR(50) NOT NULL,
+
+​    last_name VARCHAR(50) NOT NULL,
+
+​    homeroom_number SMALLINT,
+
+​    phone VARCHAR(50) NOT NULL UNIQUE,
+
+​    email VARCHAR(250) UNIQUE,
+
+​    graduation_year SMALLINT
+
 );
 
 ### Q2
 
 CREATE TABLE teachers(
-	teacher_id SERIAL PRIMARY KEY,
-	first_name VARCHAR(50) NOT NULL,
-	last_name VARCHAR(50) NOT NULL,
-	homeroom_number SMALLINT,
-	department VARCHAR(50),
-	email VARCHAR(250) UNIQUE,
-	phone VARCHAR(50) UNIQUE
+
+​    teacher_id SERIAL PRIMARY KEY,
+
+​    first_name VARCHAR(50) NOT NULL,
+
+​    last_name VARCHAR(50) NOT NULL,
+
+​    homeroom_number SMALLINT,
+
+​    department VARCHAR(50),
+
+​    email VARCHAR(250) UNIQUE,
+
+​    phone VARCHAR(50) UNIQUE
+
 );
 
 ### Q3
 
 INSERT INTO students(first_name, last_name, homeroom_number, phone, graduation_year)
+
 VALUES ('Mark', 'Watney', 5, '777-555-1234', 2035);
 
 ### Q4
 
 INSERT INTO teachers(first_name, last_name, homeroom_number, department, email, phone)
+
 VALUES ('Jonas', 'Salk', 5, 'Biology', 'jsalk@school.org', '777-555-4321');
 
 
