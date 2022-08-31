@@ -331,6 +331,20 @@ value **IN** (option1, option2, ...)
 
 ## 데이터베이스 및 테이블 만들기
 
+### 데이터베이스 및 테이블을 만들 때 고려 사항
+
+- 데이터가 어떻게 저장될지를 고려해 데이터 유형을 선택하는 데에 유의해야 함
+
+- 어떤 데이터 유형이 있는지, 데이터 유형의 한계는 무엇인지 [데이터 유형 PostgreSQL 공식 문서](https://www.postgresql.org/docs/current/datatype.html)에서 확인하고 고르기!
+
+- <u>온라인에서 최선의 관행을 찾는 것이 가장 좋음</u>
+
+  Ex) 'How to store phone number PostgreSQL' 구글링
+
+- 데이터베이스를 만들고 오래 보관하려고 한다면 사용하지 않는 히스토리 정보를 삭제할 것. 그러나 백업은 불가능. 지우고 나면 돌아가서 정보를 추가할 수 없다.
+
+---
+
 ### 데이터 유형
 
 - Boolean
@@ -338,7 +352,7 @@ value **IN** (option1, option2, ...)
 - Character
   - char, varchar, text
 - Numeric
-  - integer, floating-point number
+  - integer, floating-point, serial
 - Temporal
   - time, date, timestamp, timestamptz, interval
 - UUID(Universally Unique Identifiers)
@@ -350,24 +364,70 @@ value **IN** (option1, option2, ...)
 
 ---
 
-### 데이터베이스 및 테이블을 만들 때 고려 사항
+### 기본키 및 외래키
 
-- 데이터가 어떻게 저장될지를 고려해 데이터 유형을 선택하는 데에 유의해야 함
+- 기본키(primary key)
+  - 테이블에서 모든 열을 고유하게 식별하기 위해 사용하는 열(또는 열 그룹)
+  - integer based, unique and non-null column
+  - 데이터 유형은 항상 **SERIAL**(smallserial, serial, bigserial 있음)
+  - 열에 [PK]라고 적혀 있음
+  - <u>테이블을 JOIN할 때 어떤 열을 사용해야 할지 쉽게 알려주기 때문에 중요!</u>
+- 외래키(foreign key)
+  - 다른 테이블의 행을 고유하게 식별하는, 테이블의 필드(또는 필드 그룹)
+  - 다른 테이블의 기본키를 참조(reference)함
+  - 외래키는 반복될 수 있음
 
-- 어떤 데이터 유형이 있는지, 데이터 유형의 한계는 무엇인지 [데이터 유형 PostgreSQL 공식 문서](https://www.postgresql.org/docs/12/datatype.html)에서 확인하고 고르기!
+- <u>referencing table 또는 child table</u>: 외래키를 포함하는 테이블
 
-- <u>온라인에서 최선의 관행을 찾는 것이 가장 좋음</u>
+- <u>referenced table 또는 parent table</u>: 외래키가 레퍼런스하는 테이블
 
-  Ex) 'How to store phone number PostgreSQL' 구글링
+- 한 테이블은 다른 테이블과 얼마나 많은 관계를 맺고 있는지에 따라 여러 개의 외래키를 가질 수 있다.
 
-- 데이터베이스를 만들고 오래 보관하려고 한다면 사용하지 않는 히스토리 정보를 삭제할 것. 그러나 백업은 불가능. 지우고 나면 돌아가서 정보를 추가할 수 없다.
+- 테이블 간의 종속성을 확인하는 방법
+
+  : Schemas -> public -> Tables -> 테이블 선택 -> Constraints -> 해당 테이블의 PK(금색)와 FK(회색)를 확인할 수 있음
+
+  - 첫 번째 방법
+
+    : FK 선택 -> 상단의 탭을 Dependencies로 바꾸면 해당 열의 종속성을 보여줌. 어떤 테이블의 PK를 참조하고 있는지.
+
+  - 두 번째 방법
+
+    : FK 선택 -> 우클릭 -> Properties -> Columns -> 참조하는 테이블과 PK 열을 보여줌
 
 ---
 
-### 기본키 및 외래키
+### Constraints(제약 조건)
 
-- 기본키: 테이블에서 열을 특별하게 지칭하기 위해 사용하는 열 또는 열 그룹
-- 
+- 테이블에서 열에 적용되는 규칙. 테이블의 어떤 것에든 제약 조건을 걸 수 있다.
+- 데이터베이스에 유효하지 않은 데이터가 쓰이지 않도록 방지할 수 있음 -> 데이터베이스의 데이터에 대한 정확도와 신뢰도를 보장
+- column constraints: 개별 열에 적용됨
+  - **NOT NULL**, **UNIQUE**, **PRIMARY KEY**, FOREIGN KEY, **REFERENCES**, CHECK, EXCLUSION 등
+- table constraints: 전체 테이블에 적용됨
+  - CHECK (condition), REFERENCES, UNIQUE (column list), PRIMARY KEY (column list) 등
+
+---
+
+### CREATE
+
+- 왼쪽 단에서 Servers -> PostgreSQL 14 -> Databases 우클릭 -> Create -> Database -> 이름 입력하고 저장 -> 방금 생긴 데이터베이스 우클릭하여 Refresh
+- Query Tool 열어서 SQL 명령으로 테이블을 만들 수 있다.
+
+**CREATE** **TABLE** table_name(
+
+​    column_name **TYPE** column_constraint,
+
+​    column_name **TYPE** column_constraint1 column_constraint2 column_constraint3,
+
+​    table_constraint1 table_constraint2
+
+)
+
+**INHERITS** existing_table_name;
+
+---
+
+### INSERT
 
 
 
@@ -400,6 +460,14 @@ value **IN** (option1, option2, ...)
 53. 서브 쿼리 (12:13~)
 
 61~
+
+
+
+
+
+제약 조건 예시들 굵은 글씨 수정
+
+CREATE 일반 구문 확인
 
 
 
