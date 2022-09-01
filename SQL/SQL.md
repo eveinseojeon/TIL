@@ -586,6 +586,62 @@ value **IN** (option1, option2, ...)
 
 ### CAST
 
+**SELECT** **CAST**(column **AS** data_type) **FROM** table;
+
+- 데이터 유형을 바꿈
+- 바꾸려는 대상이 합리적인지, 알맞은 데이터 유형인지 확인해야 함
+
+---
+
+### NULLIF
+
+**NULLIF**(arg1, arg2);
+
+- 두 개의 input을 받아 두 값이 같으면 NULL을 반환, 같지 않으면 첫 번째 값을 반환
+- argument들의 순서가 중요하다.
+- NULL 값이 에러나 원치 않는 결과를 일으킬 때 **NULLIF**를 유용하게 사용할 수 있음
+
+**NULLIF**(arg, 0);
+
+- argument가 0일 때 NULL을 반환
+- 0을 반환하지 않도록 체크하는 것!
+
+---
+
+### VIEWS
+
+- 자주 사용되는 테이블과 조건의 특정 조합이 있을 때, 계속 반복해서 쓰기보다는 view를 생성해서 간단한 명령으로 빠르게 쿼리를 확인할 수 있음
+- view는 데이터베이스 객체로, 저장된 쿼리임
+- 데이터를 물리적으로 저장하지는 않으며(데이터 사본을 만들지 않음), 간단히 쿼리를 저장하는 것임
+- 이미 존재하는 view를 업데이트하거나 바꿀 수도 있음
+
+**CREATE** **VIEW** view_name **AS** query;
+
+- view 만들기
+
+**SELECT** * **FROM** view_name;
+
+- 가상의 테이블처럼 접근
+
+**CREATE OR REPLACE VIEW** view_name **AS** new_query;
+
+- view의 query를 바꾸기
+
+**ALTER VIEW** view_name **RENAME TO** new_view_name;
+
+- view 이름 바꾸기
+
+**DROP VIEW** (**IF EXISTS**) view_name;
+
+- view 삭제
+- 에러 방지하기 위해 **IF EXISTS** 추가
+
+---
+
+### 데이터 가져오기 및 내보내기
+
+- [복사 PostgreSQL 공식 문서](https://www.postgresql.org/docs/current/sql-copy.html) 참조 - 사용 가능한 파일 유형과 예시 확인 가능
+- 
 
 
 
@@ -593,6 +649,23 @@ value **IN** (option1, option2, ...)
 
 
 
+
+
+---
+
+## 다시 들을 부분
+
+41. FULL OUTER JOIN (8:19~)
+
+42. 서브 쿼리 (12:13~)
+
+79~
+
+
+
+제약 조건 예시들 굵은 글씨 수정
+
+CREATE TABLE일반 구문 확인
 
 
 
@@ -603,28 +676,6 @@ value **IN** (option1, option2, ...)
 - 테이블이 들어있는 Schemas가 public이 아닌 경우, Schemas의 이름과 온점(.)을 테이블 앞에 붙여줘야 함
 
   Ex) **SELECT** * **FROM** cd.bookings;
-
----
-
-## 다시 들을 부분
-
-41. FULL OUTER JOIN (8:19~)
-
-53. 서브 쿼리 (12:13~)
-
-76~
-
-
-
-
-
-제약 조건 예시들 굵은 글씨 수정
-
-CREATE TABLE일반 구문 확인
-
-
-
-
 
 ---
 
